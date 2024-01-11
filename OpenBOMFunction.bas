@@ -5,7 +5,7 @@ On Error GoTo Errhandler
 Dim wb As Workbook
 
 'Opens BOM workbook
-Set wb = Workbooks.Open("https://futuremetals0.sharepoint.com/sites/Aero-HoseDCC/Shared Documents/From Sales/BOMsForHoses.xlsx")
+Set wb = Workbooks.Open("URL")
 Sheets("BOM Master").Select
 'Finds the last non-blank cell in a single row or column
 

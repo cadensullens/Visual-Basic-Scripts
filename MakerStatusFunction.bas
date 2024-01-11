@@ -14,7 +14,7 @@ Dim Add As Double
 Dim table As ListObject
 On Error GoTo Errhandler
 'Opens BOM workbook
-Set wb = Workbooks.Open("https://futuremetals0.sharepoint.com/sites/Aero-HoseDCC/Shared Documents/From Planning/Maker Work Order Tracker 2023.xlsm")
+Set wb = Workbooks.Open("URL")
 
 Set table = Workbooks("Maker Work Order Tracker 2023.xlsm").Worksheets("WorkOrders").ListObjects("WorkOrders")
 Sheets("WorkOrders").Select
