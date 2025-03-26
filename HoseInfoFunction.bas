@@ -3,13 +3,15 @@ Public HoseErr As Double
 Public BuySell As Double
 Public hoseNames() As String
 Public BuildSkip As Double
+Public Miss As Double
 
 
-Function HoseInfo()
+Function HoseInfo(hose As String)
 
 HoseErr = 0
 BuySell = 0
 Count = 0
+Miss = 0
 
 Dim table As ListObject
 Dim ws As Worksheet
@@ -26,20 +28,6 @@ Set table1 = ws1.ListObjects("BuySell")
 
 On Error GoTo Errhandler
 errNum = 1
-NumberHose = Application.InputBox( _
-Title:="Hose Count", _
-Prompt:="How many Hoses are you looking up?", _
-Type:=1)
-If NumberHose = False Then GoTo EndSub
-
-errNum = 2
-For i = 1 To NumberHose
-hose = Application.InputBox( _
-Title:="Hose Name" & " " & i, _
-Prompt:="What is the name of Hose #" & i & " ?", _
-Type:=1 + 2)
-
-If hose = "0" Or hose = "False" Then GoTo EndSub
 
 'Check for hose on BOM
 For j = 1 To Len(hose)
@@ -112,12 +100,11 @@ BoolCheckBuy:
 If Application.WorksheetFunction.Sum(Bool1) = 0 Then GoTo Errhandler
 End If
 
-
+errNum = 5
 Count = Count + 1
 ReDim Preserve hoseNames(1 To Count)
 hoseNames(Count) = hose
-Start:
-Next i
+HoseErr = 0
 
 GoTo EndSub
 
@@ -132,75 +119,14 @@ MsgBox (errNum & " HoseInfo")
 GoTo EndSub
 End If
 
+If errNum = 5 Then
+MsgBox (errNum & " HoseInfo")
+GoTo EndSub
+End If
+
 If errNum = 4 Then
-    If NumberHose > 1 Then
-    Response = MsgBox("Hose, " & hose & ", not found on BOM list or Buy/Sell. Would you like to enter the Hose now?", vbYesNo, "Hose Not Found")
-    'check response from Msgbox to run a function
-        If Response = 6 Then
-        'for skipping name ask again in build function
-        BuildSkip = 1
-        'Determine Build Setup as Maker or Buy/Sell
-        Response = MsgBox("Click 'Yes' for Maker, Click 'No' for Buy/Sell", vbYesNo, "Choose Build Type")
-        
-            If Response = 6 Then
-            Call Build_Comp
-            'decrease Number hose for later functions
-            NumberHose = NumberHose - 1
-            BuildSkip = 0
-            HoseErr = 1
-            Else
-            Call BuySell_Update
-            'decrease Number hose for later functions
-            NumberHose = NumberHose - 1
-            BuildSkip = 0
-            HoseErr = 1
-            End If
-        
-        'Code for 'No' response
-        Else
-        'decrease Number hose for later functions
-        NumberHose = NumberHose - 1
-        GoTo EndSub
-        
-        'For response = 6 for Hose not found message
-        End If
-        
-    GoTo Start
-    
-    Else
-    
-    Response = MsgBox("Hose, " & hose & ", not found on BOM list or Buy/Sell. Would you like to enter the Hose now?", vbYesNo, "Hose Not Found")
-    
-    'check response from Msgbox to run a function
-            If Response = 6 Then
-            'for skipping name ask again in build function
-            BuildSkip = 1
-            'Determine Build Setup as Maker or Buy/Sell
-            Response = MsgBox("Click 'Yes' for Maker, Click 'No' for Buy/Sell", vbYesNo, "Choose Build Type")
-            
-                If Response = 6 Then
-                Call Build_Comp
-                'decrease Number hose for later functions
-                NumberHose = NumberHose - 1
-                BuildSkip = 0
-                HoseErr = 1
-                Else
-                Call BuySell_Update
-                'decrease Number hose for later functions
-                NumberHose = NumberHose - 1
-                BuildSkip = 0
-                HoseErr = 1
-                End If
-            
-            Else
-            HoseErr = 1
-            GoTo EndSub
-            End If
-            
-            GoTo EndSub
-        'For NumberHose
-        End If
-'for errNum
+HoseErr = 1
+GoTo EndSub
 End If
 
 
