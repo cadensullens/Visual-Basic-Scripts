@@ -1,7 +1,6 @@
 Attribute VB_Name = "GatherComponentInfo"
 Function Gather_Component_Info(PartNames() As String)
 
-
 'Declaring Variables for use
 Dim table As ListObject
 Dim table2 As ListObject
@@ -13,8 +12,8 @@ Dim ws3 As Worksheet
 'Setting Variables to values
 Set ws = Worksheets("Short Parts")
 Set table = ws.ListObjects("Detail")
-Set ws2 = Worksheets("Purchase Order Tracker")
-Set table2 = ws2.ListObjects("Purchase_Order_Tracker")
+Set ws2 = Worksheets("TiteFlex Backlog")
+Set table2 = ws2.ListObjects("Backlog")
 Set ws3 = Worksheets("TiteFlex Pricing")
 Set table3 = ws3.ListObjects("TiteFlex_Pricing")
 Set ws4 = Worksheets("Qb inventory")
@@ -27,8 +26,7 @@ Dim errMsg As String
 Dim errNum As Integer
 
 On Error GoTo Errhandler
-OldPrices = ""
-OldPriceQTY = 0
+
 'sets user input to a variable
 Start1:
 stringDate = CStr(CDbl(CDate(DueDate)))
@@ -50,9 +48,10 @@ PartNames(i) = Right(PartNames(i), Len(PartNames(i)) - 6)
 End If
 'Short parts function
 
+     errMsg = "Component " & PartNames(i) & " is NOT on the Short Parts list, Confirm Spelling of Part and Date. If correct then, Part is not on Short Parts."
      errNum = 1
      dateCheck = ws.Evaluate(table.ListColumns(8).DataBodyRange.Address & "<=" & stringDate)
-     CheckPart = ws.Evaluate(table.ListColumns(12).DataBodyRange.Address & "=""" & PartNames(i) & """")
+     CheckPart = ws.Evaluate(table.ListColumns(9).DataBodyRange.Address & "=""" & PartNames(i) & """")
      
      Dim Bool() As Double
      Dim check As Double
@@ -114,10 +113,11 @@ Start2:
     
      'Backlog on Order
      'This runs exactly the same as above function
+      errMsg = "Component " & PartNames(i) & " is NOT on the TiteFlex Backlog, Confirm Spelling of Part and Date. If correct then, Part is not on the TiteFlex Backlog."
       errNum = 2
-     Ordered = ws2.Evaluate(table2.ListColumns(5).DataBodyRange.Address & "=""" & PartNames(i) _
+     Ordered = ws2.Evaluate(table2.ListColumns(4).DataBodyRange.Address & "=""" & PartNames(i) _
      & """")
-     BackDate = ws2.Evaluate(table2.ListColumns(9).DataBodyRange.Address & "<=" & stringDate)
+     BackDate = ws2.Evaluate(table2.ListColumns(8).DataBodyRange.Address & "<=" & stringDate)
      
      Dim Bool3() As Double
      Dim check3 As Double
@@ -155,7 +155,7 @@ Start2:
       Dim List2 As Double
       For j = LBound(Ordered) To UBound(Ordered)
         If Ordered(j, 1) = True And BackDate(j, 1) = True Then
-        List2 = CDec(table2.ListColumns(6).Range(j + 1))
+        List2 = CDec(table2.ListColumns(5).Range(j + 1))
         ReDim Preserve together2(1 To j)
         together2(j) = List2
         Else
@@ -173,6 +173,7 @@ Start2:
      
 Start4:
     
+     errMsg = "Component " & PartNames(i) & " is NOT on the Inventory Sheet, Confirm Spelling of Part and Date. If correct, then Part is not on the Inventory Sheet."
      errNum = 4
      'Have to add OPINV inventory suffix for searhcing QB sheet
      qbName = "OPINV:" + PartNames(i)
@@ -184,6 +185,7 @@ Start3:
     
      'Titeflex Pricing finds price on that sheet
       'Vlookup as sheet does not have duplicate P/N
+     errMsg = "Component " & PartNames(i) & " is NOT on the TiteFlex pricing Sheet, Confirm Spelling of Part and Date. If correct, then Part is not on the TiteFlex pricing Sheet."
      errNum = 3
      Price = Application.WorksheetFunction.VLookup(PartNames(i), table3.Range.Columns("A:F"), 4, False)
      ReDim Preserve PriceList(1 To i)
@@ -194,32 +196,8 @@ CustomPrice:
      errMsg = "Component " & PartNames(i) & " is NOT on the Custom component pricing Sheet, Confirm Spelling of Part and Date. If correct, then Part is not on the Custom component pricing Sheet."
      errNum = 31
      Price = Application.WorksheetFunction.VLookup(PartNames(i), table5.Range.Columns("A:C"), 2, False)
-     PoDate = Application.WorksheetFunction.VLookup(PartNames(i), table5.Range.Columns("A:C"), 3, False)
+     PODate = Application.WorksheetFunction.VLookup(PartNames(i), table5.Range.Columns("A:C"), 3, False)
      
-        If CDate(PoDate) < (Date - 90) Then
-           Response = MsgBox("Pricing for " & PartNames(i) & " is from " & CDate(PoDate) & ". Do you want to update Pricing?", vbYesNo, "Update Pricing")
-           If Response = 6 Then
-               CustomComp.Caption = "Component: " & PartNames(i)
-               CustomComp.CompNameEntry.Value = PartNames(i)
-               CustomComp.Show
-               ReDim Preserve PriceList(1 To i)
-               PriceList(i) = PriceC
-               Leadtime = 0
-               ReDim Preserve LeadTimeList(1 To i)
-                LeadTimeList(i) = Leadtime
-               GoTo Continue
-           Else
-           'original start for podate
-               If OldPrices = "" Then
-               OldPrices = PartNames(i)
-               OldPriceQTY = 1
-               Else
-               OldPrices = OldPrices & ", " & PartNames(i)
-               OldPriceQTY = OldPriceQTY + 1
-               End If
-           End If
-         End If
-        
      ReDim Preserve PriceList(1 To i)
      PriceList(i) = Price
      Leadtime = 0
@@ -239,10 +217,9 @@ Leadtime:
  GoTo Continue
  
 Errhandler:
-    
+    MsgBox errMsg
     
     If errNum = 0 Then
-    MsgBox errMsg
     Gathererr = 1
     GoTo EndProc
     End If
@@ -266,19 +243,16 @@ Errhandler:
     End If
     
     If errNum = 31 Then
-    MsgBox errMsg
     Response = MsgBox("Do you want to add " & PartNames(i) & " pricing now?", vbYesNo, "Add Price for Component")
         If Response = 6 Then
-        CustomComp.Caption = "Component: " & PartNames(i)
-        CustomComp.CompNameEntry.Value = PartNames(i)
-        CustomComp.Show
+        Call Add_Component(PartNames(i), 1)
         ReDim Preserve PriceList(1 To i)
          PriceList(i) = PriceC
         Leadtime = 0
         ReDim Preserve LeadTimeList(1 To i)
          LeadTimeList(i) = Leadtime
         Resume Continue
-    Else
+        Else
         Price = 0
         ReDim Preserve PriceList(1 To i)
          PriceList(i) = Price
@@ -335,7 +309,7 @@ Next i
     
     'Creates Value for Grand Total
     Grandsum = Round(Application.WorksheetFunction.Sum(Grand), 2) + (10 * WireHole) + BarbRoy
-    PartInfo.Grandtext.Value = Grandsum
+    PartInfo.Grand.Value = "$" & Grandsum
     
     'Find largest value
     max = LongLead(1) 'set the first leadtime as the max
@@ -344,18 +318,7 @@ Next i
     Next j
     PartInfo.Longest.Value = max & " Weeks"
     
-    PartInfo.SpecialClean.Value = SpecClean
-    
-    If OldPriceQTY > 1 Then
-        OldPriceText = "Component Price for " & OldPrices & " are Older Than 90 Days, Please Review Validity for accurate quote."
-    ElseIf OldPriceQTY = 1 Then
-        OldPriceText = "Component Price for " & OldPrices & " is Older Than 90 Days, Please Review Validity for accurate quote."
-    Else
-        OldPriceText = ""
-    End If
-    
 EndProc:
 
 End Function
-
 

@@ -1,7 +1,7 @@
 Attribute VB_Name = "saveStatusFunction"
 
 
-Function saveStatus(Po As String, locR As Variant, locC As Variant, newName As String)
+Function saveStatus(PO As String, locR As Variant, locC As Variant, newName As String)
 On Error GoTo Errhandler
 Dim errNum As Double
 
@@ -16,14 +16,14 @@ TargetRange.PasteSpecial xlPasteAll
 For i = 1 To POHits
 
     If i Mod 2 = 0 Then
-    Index = locR + i
+    index = locR + i
     Worksheets("Template").Range("A20:F20").copy
-    Set TargetRange = Worksheets(newName).Range(Cells(CDbl(Index), CDbl(locC)).Address)
+    Set TargetRange = Worksheets(newName).Range(Cells(CDbl(index), CDbl(locC)).Address)
     TargetRange.PasteSpecial xlPasteAll
     Else
-    Index = locR + i
+    index = locR + i
     Worksheets("Template").Range("A19:F19").copy
-    Set TargetRange = Worksheets(newName).Range(Cells(CDbl(Index), CDbl(locC)).Address)
+    Set TargetRange = Worksheets(newName).Range(Cells(CDbl(index), CDbl(locC)).Address)
     TargetRange.PasteSpecial xlPasteAll
     End If
 Next i
@@ -33,19 +33,19 @@ errNum = 3
 For i = 1 To POHits
     With Worksheets(newName)
 
-      Index = locR + i
+      index = locR + i
      'PO #
-     .Range(Cells(CDbl(Index), CDbl(locC)).Address).Value = Po
+     .Range(Cells(CDbl(index), CDbl(locC)).Address).Value = PO
      'SO Number
-     .Range(Cells(CDbl(Index), CDbl(locC + 1)).Address).Value = SONumber(i)
+     .Range(Cells(CDbl(index), CDbl(locC + 1)).Address).Value = SONumber(i)
      'Customer Date
-     .Range(Cells(CDbl(Index), CDbl(locC + 2)).Address).Value = CustDate(i)
+     .Range(Cells(CDbl(index), CDbl(locC + 2)).Address).Value = CustDate(i)
      'Completion/Recovery Date
-     .Range(Cells(CDbl(Index), CDbl(locC + 3)).Address).Value = CompDate(i)
+     .Range(Cells(CDbl(index), CDbl(locC + 3)).Address).Value = CompDate(i)
      'Qty
-     .Range(Cells(CDbl(Index), CDbl(locC + 4)).Address).Value = BuildQty(i)
+     .Range(Cells(CDbl(index), CDbl(locC + 4)).Address).Value = BuildQty(i)
      'Job Status
-     .Range(Cells(CDbl(Index), CDbl(locC + 5)).Address).Value = JobStat(i)
+     .Range(Cells(CDbl(index), CDbl(locC + 5)).Address).Value = JobStat(i)
      
     End With
 Next i

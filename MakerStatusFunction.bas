@@ -8,19 +8,19 @@ Public MakerTrue As Double
 Public JobStat() As String
 Public wb As Workbook
 
-Function MakerStatus(Po As String)
+Function MakerStatus(PO As String)
 
 Dim Add As Double
 Dim table As ListObject
 On Error GoTo Errhandler
 'Opens BOM workbook
-Set wb = Workbooks.Open("Your Company Sharepoint URL")
+Set wb = Workbooks.Open("URL")
 
 Set table = Workbooks("Maker Work Order Tracker 2023.xlsm").Worksheets("WorkOrders").ListObjects("WorkOrders")
 Sheets("WorkOrders").Select
 
-For i = 1 To Len(Po)
-Character = Mid(Po, i, 1)
+For i = 1 To Len(PO)
+Character = Mid(PO, i, 1)
 If Character Like "[a-zA-Z]" Then GoTo StringCheck
 Next i
 
@@ -30,13 +30,13 @@ GoTo DoubleCheck
 
 StringCheck:
 With ActiveSheet
-    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=""" & Po & """")
+    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=""" & PO & """")
 End With
 GoTo BoolCheck
 
 DoubleCheck:
 With ActiveSheet
-    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=" & CDbl(Po) & "")
+    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=" & CDbl(PO) & "")
 End With
 
 BoolCheck:

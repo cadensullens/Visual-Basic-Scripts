@@ -2,7 +2,7 @@ Attribute VB_Name = "CheckStatus"
 Public POCount As Double
 Public PONumber As String
 Public POHits As Double
-Public Po As String
+Public PO As String
 Public StatusIterate As Double
 
 Public Sub Check_Status()
@@ -32,7 +32,7 @@ If VarType(PONumber) = 11 Then GoTo EndSub
 
 For d = 1 To POCount
 StatusIterate = d
-Po = POArray(d)
+PO = POArray(d)
     Call MakerStatus(POArray(d))
     Call BackLogCheck(POArray(d))
 Repeat:

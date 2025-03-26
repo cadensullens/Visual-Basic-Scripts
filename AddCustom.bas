@@ -1,6 +1,6 @@
 Attribute VB_Name = "AddCustom"
+Option Explicit
 
-
-Public Sub AddCustomSub()
-CustomComp.Show
+Public Sub AddCustom()
+Call Add_Component("", 0)
 End Sub

@@ -62,7 +62,7 @@ For i = 1 To POHits
     .ForeColor = &H464646
     .BorderStyle = 1
     .BorderColor = &HA9A9A9
-    .Value = Po
+    .Value = PO
     .SpecialEffect = 0
     End With
     

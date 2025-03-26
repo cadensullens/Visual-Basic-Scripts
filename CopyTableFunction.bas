@@ -51,18 +51,14 @@ locC = 1
     End If
     
     Call saveHose(hose, locR, locC, newName)
-Else
-locR = 4
-locC = 1
 
-'Goes to template sheet and copies the formatted table
-    If Buy = 1 Then
-        Call BuySell_CopyTable(locR, locC, newName)
-    Else
-        Call BOM_CopyTable(locR, locC, newName)
+Else
+
+Call multiHose(hoseNames)
+    If Gathererr = 1 Then
+    Worksheets(newName).Delete
     End If
-    
-    Call saveHose(hose, locR, locC, newName)
+
 End If
 GoTo EndFunction
 
@@ -71,5 +67,4 @@ Errhandler:
 MsgBox ("Cancel was selected or Error was found")
 
 EndFunction:
-newName = ""
 End Function

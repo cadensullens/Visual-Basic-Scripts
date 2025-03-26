@@ -56,7 +56,7 @@ End If
  
 saveStatus:
 
-Call saveStatus(Po, locR, locC, newName)
+Call saveStatus(PO, locR, locC, newName)
 
 
 GoTo EndSub

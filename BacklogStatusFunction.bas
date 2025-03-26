@@ -1,18 +1,18 @@
 Attribute VB_Name = "BacklogStatusFunction"
 
 
-Function BackLogCheck(Po As String)
+Function BackLogCheck(PO As String)
 
 Dim Add As Double
 Dim table As ListObject
 On Error GoTo Errhandler
-Set wb = Workbooks.Open("https://futuremetals0.sharepoint.com/sites/Aero-HoseDCC/Shared Documents/From Planning/Backlog Report.xlsb")
+Set wb = Workbooks.Open("URL")
 
 Set table = Workbooks("Backlog Report.xlsb").Worksheets("Backlog").ListObjects("Table1")
 
 
-For i = 1 To Len(Po)
-Character = Mid(Po, i, 1)
+For i = 1 To Len(PO)
+Character = Mid(PO, i, 1)
 If Character Like "[a-zA-Z]" Then GoTo StringCheck
 Next i
 
@@ -21,13 +21,13 @@ GoTo DoubleCheck
 
 StringCheck:
 With ActiveSheet
-    CheckPO = .Evaluate(table.ListColumns(6).DataBodyRange.Address & "=""" & Po & """")
+    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=""" & PO & """")
 End With
 GoTo BoolCheck
 
 DoubleCheck:
 With ActiveSheet
-    CheckPO = .Evaluate(table.ListColumns(6).DataBodyRange.Address & "=" & CDbl(Po) & "")
+    CheckPO = .Evaluate(table.ListColumns(4).DataBodyRange.Address & "=" & CDbl(PO) & "")
 End With
 
 BoolCheck:
@@ -55,17 +55,16 @@ BoolCheck:
             Add = Add + 1
                 With Workbooks("Backlog Report.xlsb").Worksheets("Backlog")
                     ReDim Preserve SONumber(1 To Add)
-                        SONumber(Add) = .Range(Cells(k + 1, 5).Address).Value
+                        SONumber(Add) = .Range(Cells(k + 1, 3).Address).Value
                     ReDim Preserve BuildQty(1 To Add)
-                        BuildQty(Add) = .Range(Cells(k + 1, 9).Address).Value
+                        BuildQty(Add) = .Range(Cells(k + 1, 7).Address).Value
                     ReDim Preserve CustDate(1 To Add)
-                        CustDate(Add) = .Range(Cells(k + 1, 2).Address).Value
+                        CustDate(Add) = .Range(Cells(k + 1, 9).Address).Value
                     ReDim Preserve CompDate(1 To Add)
-                        CompDate(Add) = .Range(Cells(k + 1, 3).Address).Value
-                    ReDim Preserve JobStat(1 To Add)
-                        JobStat(Add) = .Range(Cells(k + 1, 1).Address).Value
+                        CompDate(Add) = .Range(Cells(k + 1, 10).Address).Value
                 End With
-                
+                ReDim Preserve JobStat(1 To Add)
+                JobStat(Add) = "Not Released"
             End If
             Next k
             

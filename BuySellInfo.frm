@@ -19,12 +19,7 @@ Sub Userform_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X 
 
 ExitInactive.Visible = True
 SaveExistInactive.Visible = True
-If copyTemp = 3 Then
-SaveNewInactive.Visible = False
-SaveNewActive.Visible = False
-Else
 SaveNewInactive.Visible = True
-End If
 
 End Sub
 Sub ExitInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
@@ -32,7 +27,7 @@ Sub ExitInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVa
 
 ExitInactive.Visible = False
 
-If iterate = NumberHose And copyTemp <> 3 Then
+If iterate = NumberHose Then
 NewHoseInactive.Visible = True
 NewHoseActive.Visible = True
 Else
@@ -41,12 +36,7 @@ NewHoseActive.Visible = False
 End If
 
 SaveExistInactive.Visible = True
-If copyTemp = 3 Then
-SaveNewInactive.Visible = False
-SaveNewActive.Visible = False
-Else
 SaveNewInactive.Visible = True
-End If
 
 End Sub
 
@@ -56,12 +46,7 @@ Sub NewHoseInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, B
 ExitInactive.Visible = True
 NewHoseInactive.Visible = False
 SaveExistInactive.Visible = True
-If copyTemp = 3 Then
-SaveNewInactive.Visible = False
-SaveNewActive.Visible = False
-Else
 SaveNewInactive.Visible = True
-End If
 
 End Sub
 Sub SaveExistInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
@@ -69,7 +54,7 @@ Sub SaveExistInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer,
 
 ExitInactive.Visible = True
 
-If iterate = NumberHose And copyTemp <> 3 Then
+If iterate = NumberHose Then
 NewHoseInactive.Visible = True
 NewHoseActive.Visible = True
 Else
@@ -78,12 +63,7 @@ NewHoseActive.Visible = False
 End If
 
 SaveExistInactive.Visible = False
-If copyTemp = 3 Then
-SaveNewInactive.Visible = False
-SaveNewActive.Visible = False
-Else
 SaveNewInactive.Visible = True
-End If
 
 End Sub
 Sub SaveNewInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
@@ -91,7 +71,7 @@ Sub SaveNewInactive_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, B
 
 ExitInactive.Visible = True
 
-If iterate = NumberHose And copyTemp <> 3 Then
+If iterate = NumberHose Then
 NewHoseInactive.Visible = True
 NewHoseActive.Visible = True
 Else
@@ -117,37 +97,24 @@ Private Sub SaveExistActive_MouseDown(ByVal Button As Integer, ByVal Shift As In
 Unload BuySellInfo
 copyTemp = 1
 BuySell = 1
-Call copy_table(copyTemp, BuySell, hose)
+Call Copy_AnotherSheet
 End Sub
 
 Private Sub SaveNewActive_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
 Unload BuySellInfo
 copyTemp = 2
 BuySell = 1
-Call copy_table(copyTemp, BuySell, hose)
+Call Copy_AnotherSheet
 End Sub
 
 Private Sub UserForm_Initialize()
 
-If iterate = NumberHose And copyTemp <> 3 Then
+If iterate = NumberHose Then
 NewHoseInactive.Visible = True
 NewHoseActive.Visible = True
 Else
 NewHoseInactive.Visible = False
 NewHoseActive.Visible = False
-End If
-
-If copyTemp = 3 Then
-SaveNewInactive.Visible = False
-SaveNewActive.Visible = False
-End If
-
-
-If CDate(Expire) < Date Then
-BuySellInfo.Quoted.BackColor = &HC0C0FF
-MsgBox ("Quote is expired, Please Review Validity.")
-Else
-BuySellInfo.Quoted.BackColor = &HFFFFFF
 End If
 
 End Sub
