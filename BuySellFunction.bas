@@ -1,11 +1,11 @@
 Attribute VB_Name = "BuySellFunction"
 Public Vendor As String
 Public PriceBS As String
-Public LeadtimeBS As Double
+Public LeadtimeBS As String
 Public QuoteDate As String
 Public ValidFor As Double
 Public Expire As String
-Public MOQ As Double
+Public MOQ As String
 
 Function Buy_Sell(hose As String)
 

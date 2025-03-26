@@ -30,7 +30,7 @@ Function BuySell_CopyTable(locR As Variant, locC As Variant, newName As String)
          LineStyle:=xlContinuous, Weight:=xlThin
          
          'copies margin table
-         Worksheets("Template").Range("L6:N15").copy
+         Worksheets("Template").Range("L6:N8").copy
          Set TargetRange = Worksheets(newName).Range(Cells(CDbl(locR), CDbl(locC + 5)).Address)
          TargetRange.PasteSpecial xlPasteAll
          
@@ -38,8 +38,8 @@ Function BuySell_CopyTable(locR As Variant, locC As Variant, newName As String)
          Worksheets(newName).Range(Cells(CDbl(locR), CDbl(locC + 6)).Address).Formula2 = ("=" & Cells(CDbl(locR + 1), CDbl(locC + 1)).Address)
          
          'Places formulas for margin in correct cells
-         For i = 0 To 7
-         Worksheets(newName).Range(Cells(CDbl(locR + 2 + i), CDbl(locC + 7)).Address).Formula2 = ("=" & Cells(CDbl(locR), CDbl(locC + 6)).Address & "/" & "(1-" & Cells(CDbl(locR + 2 + i), CDbl(locC + 6)).Address & ")")
-         Next i
+'         For i = 1 To 1
+'         Worksheets(newName).Range(Cells(CDbl(locR + 2 + i), CDbl(locC + 7)).Address).Formula2 = ("=" & Cells(CDbl(locR), CDbl(locC + 6)).Address & "/" & "(1-" & Cells(CDbl(locR + 2 + i), CDbl(locC + 6)).Address & ")")
+'         Next i
          
 End Function

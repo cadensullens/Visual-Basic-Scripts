@@ -6,7 +6,7 @@ Public Number As Double
 Public breakCount As Double
 Public hose As String
 Public copyTemp As Double
-Public compQTY() As Double
+Public compQTY() As Variant
 Public Grand() As Double
 Public PriceBreaks() As Double
 Public LongLead() As Double
@@ -21,50 +21,35 @@ Public iterate As Double
 Public WireHole As Variant
 Public Grandsum As Double
 Public BarbRoy As Variant
+Public SpecClean As String
+Public OGBreak As Double
+Public onIt As Double
+Public FloatValue As Double
+Public PriceWrong As Double
+Public LeadEntry As String
+Public MWrong As Double
+Public CompGather As String
+Public LiveLeadSkip As Boolean
+Public OldPriceText As String
+Public CleanCustomPrice As Double
+Public PartInfoValue As Boolean
+Public OGName As String
 
 
-'Code needs to be directed for if a hose is not found on list 9/22
+
 Public Sub Enter_Comp()
 
+OGName = ActiveSheet.Name
 
-Call HoseInfo
-If HoseErr = 1 Then GoTo EndSub
-If NumberHose = False Then GoTo EndSub
-If hose = "0" Or hose = "False" Then GoTo EndSub
+Dim buyCount As Double
+buyCount = 0
+copyTemp = 0
+OldPriceText = vbNullString
 
-If NumberHose = 1 Then
-Call Buy_Sell(hose)
-If BuySell = 1 Then GoTo SkipD
+If onIt <> 1 Then
+hose = ""
 End If
+HoseLookUp.Show vbModeless
 
-Call DateEntry
-If LeadEntry = "False" Then GoTo EndSub
-
-Call PriceBreaksFunc
-If priceend = 1 Then GoTo EndSub
-
-SkipD:
-For i = 1 To NumberHose
-iterate = i
-hose = hoseNames(i)
-Call Gather_Info(hoseNames(i))
-
-If Gathererr = 1 And i <> NumberHose Then
-GoTo pass
-ElseIf Gathererr = 0 Then GoTo skipE
-Else
-GoTo EndSub
-End If
-
-skipE:
-If BuySell <> 1 Then
-PartInfo.Show
-Else
-BuySellInfo.Show
-End If
-
-pass:
-Next i
-
-EndSub:
+onIt = 0
 End Sub
